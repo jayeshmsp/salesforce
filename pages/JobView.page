@@ -1,0 +1,221 @@
+<apex:page standardController="GW_Volunteers__Volunteer_Job__c" cache="false" extensions="JobViewController" action="{!isValidToken}" showHeader="false" sidebar="false">
+    <apex:stylesheet value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/ui-lightness/jquery-ui.css" />
+    <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.js')}"></script>
+    <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.modal.js')}" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/jquery.modal.css')}" type="text/css" media="screen" />
+    <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/bootstrap.min.js')}"></script>
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style.css')}" rel='stylesheet' />
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/font-awesome.css')}" rel='stylesheet' />
+    <style>
+        td {
+            padding: 4px !important;
+        }
+        .custPopup{
+           background-color: white;
+           border-width: 0px;
+           border-radius:10px;
+           z-index: 9999;
+           left: 50%;
+           padding:20px;
+           position: absolute; 
+           margin-left: -100px; top:40%;
+       }
+       .popupBackground{
+           background-color:black;
+           opacity: 0.30;
+           filter: alpha(opacity = 30);
+           position: absolute;
+           width: 100%;
+           height: 100%;
+           top: 0;
+           left: 0;
+           z-index: 9998;
+       }
+       .btstrpmodal {
+            background-color: rgba(93, 83, 83, 0.5);
+            display:none;
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            z-index: 1050;
+            outline: 0px;
+            padding-right: 0px;
+        }
+    </style>
+    <div class="bootstrapped">
+        <div id="myModal" class="btstrpmodal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="modalTitle" ></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Thank you for Signing Up! Check your email for further instructions.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="refreshParent(); return false;" class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="myModal2" class="btstrpmodal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="modalTitle" ></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This shift has been canceled successfully.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="refreshParent(); return false;" class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="myModal4" class="btstrpmodal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="modalTitle" ></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This shift has been uncanceled successfully.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="refreshParent(); return false;" class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="myModal3" class="btstrpmodal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="modalTitle" ></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This shift has been canceled by the Organization. Please sign up for another shift.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onClick="refreshParent();return false;" class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" id="showPopup" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myModal"></button>
+        <button type="button" id="showPopup2" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myModal2"></button>
+        <button type="button" id="showPopup3" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myModal4"></button>
+        <button type="button" id="showPopup1" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myModal3"></button>
+        <apex:pageBlock title="Job Details">
+            <apex:pageBlockSection columns="1">
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.Name}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Description__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Skills_Needed__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location_Information__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location_Street__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location_City__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location_Zip_Postal_Code__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.Location_Description__c}"/>
+                <apex:outputField value="{!GW_Volunteers__Volunteer_Job__c.Parking_Information__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                        <p class="cssJobLocationMap">
+                            <iframe class="cssGoogleMapIFrame" 
+                                src="https://www.google.com/maps/embed/v1/place?q={!GW_Volunteers__Volunteer_Job__c.Location_Street_Temp__c}+{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location_City__c}+{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location__c}+{!GW_Volunteers__Volunteer_Job__c.GW_Volunteers__Location_Zip_Postal_Code__c}&key=AIzaSyCZ1yc5ne3LcN4-vh0NYergthLTy5aKNPk">
+                            </iframe>
+                        </p>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    
+        <apex:form >
+            <apex:actionstatus id="counterStatus">
+                <apex:facet name="start">
+                    <apex:outputPanel id="tstpopup">
+                        <apex:outputPanel styleClass="popupBackground" layout="block"/>
+                        <apex:outputPanel styleClass="custPopup" layout="block">
+                            <img src="/img/loading24.gif" style="vertical-align:middle;horizontal-align:middle"/> <span>Please wait...</span>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:facet>
+            </apex:actionstatus>
+            <apex:inputhidden value="{!selectedShiftId}" id="selectedShiftId"/>
+            <apex:actionFunction name="updateSelectedShiftIdAF" action="{!createVolunteerHour}" oncomplete="$('#showPopup').click();" status="counterStatus" rerender="rptShifts"/>
+            <apex:pageBlock title="Shifts" rendered="{!IF( jobShifts.size > 0 , true , false )}" >
+                <apex:dataTable value="{!jobShifts}" var="shift" id="rptShifts" columnClasses="cssJobShiftSignup" >
+                    <apex:column style="text-align:center;" >
+                        <apex:outputPanel rendered="{!shift.shift.GW_Volunteers__Number_of_Volunteers_Still_Needed__c != 0 && DATEVALUE(shift.shift.GW_Volunteers__Start_Date_Time__c) >= TODAY() && GW_Volunteers__Volunteer_Job__c.GW_Volunteers__External_Signup_Url__c == null}" >
+                            <apex:commandButton styleclass="bttn" value="Sign Up" onclick="updateSelectedShiftId('{!shift.shift.Id}');" rerender="none" rendered="{!IF(isShifSignedUp , false, true)}" status="counterStatus"/>
+                            <apex:commandButton styleclass="bttn" value="Cancel" onclick="cancelHour('{!shift.hourId}');" rerender="none" rendered="{!IF(isShifSignedUp && isShifSignedUpAndConfirm , true , false )}" status="counterStatus"/>
+                            <apex:commandButton styleclass="bttn" value="Uncancel" onclick="uncancelHour('{!shift.hourId}');" rerender="none" rendered="{!IF(isShifSignedUp && !isShifSignedUpAndConfirm , true, false)}" status="counterStatus"/>
+                            <script>
+                                $('.bttn').removeClass('btn');
+                            </script>
+                        </apex:outputPanel>
+                        <apex:outputPanel style="font-style:italic;" rendered="{!BLANKVALUE(shift.shift.GW_Volunteers__Number_of_Volunteers_Still_Needed__c, -1) == 0 && DATEVALUE(shift.shift.GW_Volunteers__Start_Date_Time__c) >= TODAY()}" >
+                            <apex:commandButton styleclass="bttn" value="Cancel" onclick="cancelHour('{!shift.hourId}');" rerender="none" rendered="{!IF(isShifSignedUp && isShifSignedUpAndConfirm , true , false )}" status="counterStatus"/>
+                            <script>
+                                $('.bttn').removeClass('btn');
+                            </script>
+                        </apex:outputPanel>
+                        <apex:outputText value="Closed" style="font-style:italic;" 
+                            rendered="{!DATEVALUE(shift.shift.GW_Volunteers__Start_Date_Time__c) < TODAY()}" />
+                        &nbsp;&nbsp;&nbsp;
+                    </apex:column>
+                    <apex:column >{!shift.startDay}</apex:column>
+                    <apex:column >{!shift.startDate}</apex:column>            
+                    <apex:column >{!shift.shiftTime}</apex:column>            
+                    <apex:column >
+                        confirmed: {!NULLVALUE(shift.shift.GW_Volunteers__Total_Volunteers__c, 0)} &nbsp;&nbsp;available: {!NULLVALUE(shift.shift.GW_Volunteers__Number_of_Volunteers_Still_Needed__c, 0)}
+                    </apex:column>
+                    <apex:column ></apex:column>
+                </apex:dataTable>
+            </apex:pageBlock>
+            <apex:inputHidden id="selectedHourId" value="{!selectedHourId}"/>
+            <apex:actionfunction status="counterStatus" name="cancelHourAF" action="{!cancelHour}" oncomplete="$('#showPopup2').click();" rerender="rptShifts"/>
+            <apex:actionfunction status="counterStatus" name="uncancelHourAF" action="{!uncancelHour}" oncomplete="checkResult({!canceledByOrganization });" rerender="rptShifts"/>
+        </apex:form>
+    </div>
+    <script>
+        function updateSelectedShiftId(selectedShiftId) {
+            $('[id$="selectedShiftId"]').val(selectedShiftId);
+            updateSelectedShiftIdAF();
+        }
+        function checkResult(flag) {
+            if(flag)
+                $('#showPopup1').click();
+            else
+                $('#showPopup3').click();
+        }
+        function cancelHour(id) {
+            $('[id$="selectedHourId"]').val(id);
+            cancelHourAF();
+        }
+        
+        function uncancelHour(id) {
+            $('[id$="selectedHourId"]').val(id);
+            uncancelHourAF();
+        }
+        function refreshParent() {
+            console.log('## refresh.. {!conId}');
+            window.parent.location.href = '/apex/CalendarDashboardV2?id={!conId}';
+        }
+    </script>
+</apex:page>

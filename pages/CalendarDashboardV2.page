@@ -1,0 +1,1180 @@
+<apex:page standardcontroller="Contact" cache="false" title="Calendar Dashboard" sidebar="false" showHeader="false" standardstylesheets="false" doctype="html-5.0" extensions="CalendarDashboardControllerV2" action="{!isValidContact}">
+    
+    <!--link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/fullcalendar.css')}" rel='stylesheet' />
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/fullcalendar.print.css')}" rel='stylesheet' media='print' />
+    <!-script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/moment.min.js')}"></script>
+    <!script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.js')}"></script>
+    <!script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.modal.js')}" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/jquery.modal.css')}" type="text/css" media="screen" />
+    <!script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/fullcalendar.js')}"></script>
+    <!script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/bootstrap.min.js')}"></script>
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style.css')}" rel='stylesheet' />
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/font-awesome.css')}" rel='stylesheet' />
+
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style-breadcrumbs.css')}" rel='stylesheet' />
+    <!script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/breadcrumbs.js')}"></script-->
+    
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/fullcalendar.css')}" rel='stylesheet' />
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/fullcalendar.print.css')}" rel='stylesheet' media='print' />
+    <apex:includeScript value="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/moment.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.modal.js')}" />
+    <link rel="stylesheet" href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/jquery.modal.css')}" type="text/css" media="screen" />
+    <apex:includeScript value="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/fullcalendar.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/bootstrap.min.js')}" />
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style.css')}" rel='stylesheet' />
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/font-awesome.css')}" rel='stylesheet' />
+
+    <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style-breadcrumbs.css')}" rel='stylesheet' />
+    <apex:includeScript value="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/breadcrumbs.js')}" />
+
+
+    <style>
+        .fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody, .fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-content, .fc-unthemed .fc-popover {
+            border-color: rgba(200, 123, 84, 1);
+        }
+        .fc th, .fc td {
+            border-width: 3px;
+        }
+        .fc-ltr .fc-basic-view .fc-day-number {
+            float: right;
+         }
+         .fc-day-header { 
+             background: rgba(232, 209, 205, 1) !important;
+         }
+        .fc-day-top { 
+            background: rgba(232, 209, 205, 1) !important;
+            border-bottom: 3px solid !important; 
+            border-color: rgba(200, 123, 84, 1) !important;
+         }
+        .fc-sun {     
+            background: rgba(232, 182, 160, 1); 
+        }
+        .fc-sat { 
+            background: rgba(232, 182, 160, 1);  
+        }
+        .fc td.fc-today {
+            border-style: solid;
+        }
+        .fc-other-month { 
+            background: rgba(237,237,237,1) 
+        }
+        .calendarHeader {
+            margin-bottom: -3px;
+            border: 2px solid rgba(200, 123, 84, 1);
+            border-width: 2px;
+            padding: 6px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            background: rgba(232, 209, 205, 1);
+            height: 60px;
+        }
+        .fc-toolbar {
+            margin-bottom: 0px; 
+        }
+        .fc-row .fc-content-skeleton tbody td, .fc-row .fc-helper-skeleton tbody td {
+            padding-top: 2px;
+        }
+        .bootstrapped .panel-default {
+            border-color: #c87b54;
+            border-width: 2px;
+            border-radius: 0px;
+
+        }
+        .calendar-optionContainer {
+            //display:flex;
+            margin-left: 1%;
+            padding-top: 3%;
+        }
+        .bootstrapped .panel-default > .panel-heading {
+            color: #333333;
+            background-color: #c87b54;
+            border-color: #c87b54;
+            border-radius: 0px;
+        }
+        
+        .bootstrapped .row {
+            margin-left: 0px;
+            margin-right: -15px;
+        }
+
+        .sidePanels {
+            width:40%;
+            margin-left: 1%;
+            text-align: left;
+        }
+        .innerLinks {
+            color:#c87b54;
+            padding: 10px;
+            border-bottom: 1px solid;
+        }
+        .bootstrapped .panel-body {
+            padding: 0px;
+        }
+        .fc-next-button, .fc-prev-button {
+            display: none;
+        }
+        #calendar {
+            margin-top: -69px;
+        }
+        .fc-event {
+            color: #fff !important;
+            text-decoration: none;
+            border:0px !important;
+        }
+        .fa-icon {
+            color: #c87b54;
+            font-size: 1.5em;
+            cursor:pointer;
+        }
+        *, *::after, *::before {
+            box-sizing: border-box;
+        }
+        .btn {
+             background: #efaca1;
+             border: 2px solid #c87b54 !important;
+        }
+        .btn:hover {
+             background: #c87b54 ;
+             color: white !important;
+        }
+        .triangle {
+            margin-top: 0;
+        }
+        .cd-breadcrumb li, .cd-breadcrumb  li a {
+            cursor : default;
+        }
+         
+        a {
+            color: rgb(200, 123, 84);
+        }
+        .tooltiptopicevent{
+            
+            height: 60px;
+            background: rgb(232, 209, 205);
+            position: fixed;
+            z-index: 10001;
+            padding: 10px;
+            left: 455px;
+            right: auto;
+            top: auto;
+            bottom: 58px;
+            color: #c87b54;
+            border-radius: 15px;
+            border: 2px solid #c87b54;
+        }
+        
+        .fc-day-grid-event .fc-content {
+            white-space: initial;
+        }
+        .btstrpmodal {
+            background-color: rgba(93, 83, 83, 0.5);
+            display:none;
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            z-index: 1050;
+            outline: 0px;
+            padding-right: 0px;
+            overflow: auto;
+        }
+        .custPopup{
+           background-color: white;
+           border-width: 0px;
+           border-radius:10px;
+           z-index: 9999;
+           left: 50%;
+           padding:20px;
+           position: absolute; 
+           margin-left: -100px; top:40%;
+       }
+       .popupBackground{
+           background-color:black;
+           opacity: 0.30;
+           filter: alpha(opacity = 30);
+           position: absolute;
+           width: 100%;
+           height: 100%;
+           top: 0;
+           left: 0;
+           z-index: 9998;
+       }
+       .optionContainer {
+            border: 1px solid darkgrey;
+            border-radius: 4px;
+            margin-top: 1px;
+            display: none;
+            max-height: 200px;
+            min-width: 150px;
+            overflow: auto;
+            position: absolute;
+            background: white;
+        }
+        .form-control {
+            width: 100%;
+        }
+        .profileTable td {
+            padding: 4px;
+        }
+        .fc-day-grid-container {
+            height : auto !important;
+        }
+        .listContainer {
+            max-height: 250px;
+            overflow: auto;
+        }
+        .bootstrapped .btn {
+            padding : 2px 6px !important;
+        }
+        body .fc {
+            font-size: .74em !important;
+        }
+        
+        .statusList{
+            width: 100%;
+            min-height: 50px;
+        }
+        .statusList .list-default {
+        
+            float: left;
+            width: 32%;
+            border-color: #c87b54;
+            border-width: 2px;
+            border-radius: 0px;
+        }
+        .statusList .right-pad{
+            margin-right: 2%;
+        }
+        .statusList .list-default > .list-heading {
+            color: #333333;
+            background-color: #c87b54;
+            border-color: #c87b54;
+            border-radius: 0px;
+        }
+        .centerAlign{
+        	text-align: center;	/* Chrome and Safari */
+        }
+    </style>
+    
+    <apex:form >
+        <button type="button" id="showPopup" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myModal3"></button>
+        <apex:actionstatus id="counterStatus">
+            <apex:facet name="start">
+                <apex:outputPanel id="tstpopup">
+                    <apex:outputPanel styleClass="popupBackground" layout="block"/>
+                    <apex:outputPanel styleClass="custPopup" layout="block">
+                        <img src="/img/loading24.gif" style="vertical-align:middle;horizontal-align:middle"/> <span>Please wait...</span>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </apex:facet>
+        </apex:actionstatus>
+        <div class="bootstrapped">
+        
+            <div id="myCancelModal" class="btstrpmodal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" id="modalTitle" ></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Your shift succesfully canceled.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="myUnCancelModal" class="btstrpmodal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" id="modalTitle" ></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Your shift succesfully uncanceled.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div id="myModal3" class="btstrpmodal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" id="modalTitle" ></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>This shift has been canceled by the Organization. Please sign up for another shift.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="myModal" class="btstrpmodal fade" role="dialog">
+                <div class="modal-dialog">
+        
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                       <!--     <h4 class="modal-title" id="modalTitle" >Upload Driver License</h4>-->
+                        </div>
+                        <div class="modal-body">
+                            <input type="file" id="document"/>
+                        </div>
+                        <div class="modal-footer">
+                        <!--    <input id="uploadButton" type="button" class="btn" onclick="insertAttachment();" value="Upload"/>
+                            <button type="button" class="btn" data-dismiss="modal">Close</button>-->
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+            
+            
+            <div id="myModal2" class="btstrpmodal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+        
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Profile</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="profileTable">
+                                <tr>
+                                    <td>First Name</td>
+                                    <td><apex:inputField value="{!selectedContact.FirstName}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Last Name</td>
+                                    <td><apex:inputField value="{!selectedContact.LastName}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><apex:inputField value="{!selectedContact.npe01__HomeEmail__c}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Primary Phone</td>
+                                    <td><apex:inputField value="{!selectedContact.Primary_Phone__c}" html-maxlength="10" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Primary Phone Type</td>
+                                    <td><apex:inputField value="{!selectedContact.Primary_Phone_Type__c}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Mailing Street</td>
+                                    <td><apex:inputField value="{!selectedContact.Mailing_Street__c}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Mailing City</td>
+                                    <td><apex:inputField value="{!selectedContact.Mailing_City__c}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Mailing State</td>
+                                    <td><apex:inputField value="{!selectedContact.Mailing_State__c}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Mailing Zip/Postal Code</td>
+                                    <td><apex:inputField value="{!selectedContact.Mailing_Postal_Code__c}" styleClass="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Volunteer Skills</td>
+                                    <td>
+                                        <div style="display:flex;">
+                                            <apex:inputText id="inputText" html-placeholder="Skills" styleClass="form-control" style="width: 200px;" onkeyup="showOptions(this.value);"/>&nbsp;&nbsp; <b id="count">0</b>&nbsp;&nbsp; selected.
+                                        </div>
+                                        <div class="optionContainer">
+                                            <apex:repeat value="{!skillOptions}" var="option" >
+                                                <div class="innerDiv">
+                                                    <apex:inputCheckbox value="{!option.selected}" styleclass="skillOptions" style="cursor: pointer;"/>
+                                                    <apex:outputText styleClass="metadataName" value="{!option.label}"/>
+                                                </div>
+                                            </apex:repeat>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Volunteer Availability</td>
+                                    <td><apex:inputField value="{!selectedContact.GW_Volunteers__Volunteer_Availability__c}"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <apex:commandButton id="uploadButton" styleclass="btn" action="{!updateContact}" status="counterStatus" value="Update" oncomplete="$('#cancelButton').click();" rerender="none"/>
+                            <button id="cancelButton" type="button" class="btn" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+        
+                </div></div>
+        
+        <div class="">
+            
+            <div>
+                <div class="row centerAlign" >
+                    <div style="max-width: 1067px;padding-left: 15px; margin: 0 auto;">
+                        <div style="text-align: left;">Welcome back <b>{!selectedContact.Name}</b></div>
+                        My Status
+                        <ul class="cd-breadcrumb triangle" >
+                            <li class="{!IF(stage1 , '' , 'current')}" style="width:19%;"><a href="javascript:void(0);">Application<br/>Completed</a></li>
+                            <li class="{!IF(stage2 , '' , 'current')}" style="width:22%;"><a href="javascript:void(0);">Orientation<br/>Completed</a></li>
+                            <!--li class="{!IF(stage3 , '' , 'current')}"><a href="javascript:void(0);">Driver<br/>License Submitted</a></li>
+                            <li class="{!IF(stage4 , '' , 'current')}"><a href="javascript:void(0);">Insurance Card<br/>Submitted</a></li-->
+                            <li class="{!IF(stage5 , '' , 'current')}" style="width:26%;"><a href="javascript:void(0);">Workshop Observation<br/>Approved</a></li>
+                            <li class="{!IF(stage6 , '' , 'current')}" style="width:30%;"><a href="javascript:void(0);">Workshop Observation<br/>Completed</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="centerAlign" >
+            <div class="bootstrapped " style="max-width: 900px;margin-bottom:2%;text-align: left; margin: 0 auto;">
+                <!--<button class="btn"  type="button" onclick="showModal('License');" data-toggle="modal" data-target="#myModal">Upload Drivers License</button>
+                <button class="btn"  type="button" onclick="showModal('Insurance');" data-toggle="modal" data-target="#myModal">Upload Insurance Card</button>&nbsp;&nbsp; -->
+                <apex:selectList size="1" value="{!defaultDropdownValue}" id="filterList" onchange="changeFilter()">
+                    <apex:selectOption itemLabel="Available Shifts" itemValue="Available Shifts"></apex:selectOption>
+                    <apex:selectOption itemLabel="My Waiting List" itemValue="My Waiting List"></apex:selectOption>
+                    <apex:selectOption itemLabel="My Confirmations" itemValue="My Confirmations"></apex:selectOption>
+                </apex:selectList>
+                
+                <!--<button class="btn" style="float: right;" type="button" data-toggle="modal" data-target="#myModal2">Edit Profile</button> -->
+                <button class="btn" onclick="openVolunteerApplicationVFpage3(); return false;" style="float: right;" type="button" data-toggle="modal">Edit Profile</button>
+            </div>
+            <!-- Below Section Added by Ravi - OutstripInfotech -->
+            <!--div class="bootstrapped" style="max-width: 900px;margin-bottom:2%;text-align: left; ">
+                <div class="panel list-default" style="width: 30%;">
+                    <div class="list-heading">My Waiting List</div>
+                    <div class="panel-body listContainer">
+                        <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                            <apex:repeat value="{!MyWaitingList}" var="waiting">
+                                <tr>
+                                    <td style="width:25%; vertical-align: top;">
+                                        <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a> 
+                                    </td>
+                                    <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                        {!waiting.Volunteer_Job_Name__c}
+                                    </td>
+                                    <td style="width:25%; vertical-align: top;">
+                                        <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="cancelHour('{!waiting.Id}');">Cancel</button>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                        <apex:outputPanel rendered="{!IF(MyWaitingList.size > 0 , false , true )}">
+                            No records found.
+                        </apex:outputPanel>
+                    </div>
+                </div>
+                
+                <div class="panel list-default" style="width: 30%;">
+                    <div class="list-heading">My Confirmations</div>
+                    <div class="panel-body listContainer" >
+                        
+                        <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                            <apex:repeat value="{!MyConfirmList}" var="waiting">
+                                <tr>
+                                    <td style="width:25%; vertical-align: top;">
+                                        <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a> 
+                                    </td>
+                                    <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                        {!waiting.Volunteer_Job_Name__c}
+                                    </td>
+                                    <td style="width:25%; vertical-align: top;">
+                                        <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="cancelHour('{!waiting.Id}');">Cancel</button>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                        <apex:outputPanel rendered="{!IF(MyConfirmList.size > 0 , false , true )}">
+                            No records found.
+                        </apex:outputPanel>
+                    </div>
+                </div>
+                
+                <div class="panel list-default" style="width: 30%;">
+                    <div class="list-heading">My Cancellations</div>
+                    <div class="panel-body listContainer">
+                        <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                            <apex:repeat value="{!MyCancelList}" var="waiting">
+                                <tr>
+                                    <td style="width:25%; vertical-align: top;">
+                                        <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a>
+                                    </td>
+                                    <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                        {!waiting.Volunteer_Job_Name__c}
+                                    </td>
+                                    <td style="width:25%; vertical-align: top;">
+                                        <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="uncancelHour('{!waiting.Id}');">Uncancel</button>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                        <apex:outputPanel rendered="{!IF(MyCancelList.size > 0 , false , true )}">
+                            No records found.
+                        </apex:outputPanel>
+                    </div>
+                </div>
+            </div-->
+            <apex:outputpanel styleclass="bootstrapped sidePanels" layout="block" id="sidePanels" style=" margin: 0 auto;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">My Waiting List</div>
+                        <div class="panel-body listContainer">
+                            <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                                <apex:repeat value="{!MyWaitingList}" var="waiting">
+                                    <tr>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a> 
+                                        </td>
+                                        <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                            {!waiting.Volunteer_Job_Name__c}
+                                        </td>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="cancelHour('{!waiting.Id}');">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <apex:outputPanel rendered="{!IF(MyWaitingList.size > 0 , false , true )}">
+                                No records found.
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">My Confirmations</div>
+                        <div class="panel-body listContainer" >
+                            
+                            <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                                <apex:repeat value="{!MyConfirmList}" var="waiting">
+                                    <tr>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a> 
+                                        </td>
+                                        <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                            {!waiting.Volunteer_Job_Name__c}
+                                        </td>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="cancelHour('{!waiting.Id}');">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <apex:outputPanel rendered="{!IF(MyConfirmList.size > 0 , false , true )}">
+                                No records found.
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">My Cancellations</div>
+                        <div class="panel-body listContainer">
+                            <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                                <apex:repeat value="{!MyCancelList}" var="waiting">
+                                    <tr>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a>
+                                        </td>
+                                        <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                            {!waiting.Volunteer_Job_Name__c}
+                                        </td>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="uncancelHour('{!waiting.Id}');">Uncancel</button>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <apex:outputPanel rendered="{!IF(MyCancelList.size > 0 , false , true )}">
+                                No records found.
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </apex:outputpanel>
+            <div class="calendar-optionContainer" >
+                
+                <div style="width:80%; margin: 0 auto;">
+                    <div class="calendarHeader " >
+                        <i class="fa fa-2x fa-arrow-left fa-icon pull-left" onclick="clickcalendarButton('.fc-prev-button');"/>
+                        <i class="fa fa-2x fa-arrow-right fa-icon pull-right"  onclick="clickcalendarButton('.fc-next-button');"/>
+                    </div>
+                    <div id='calendar' ></div>
+                </div>
+                <!--apex:outputpanel styleclass="bootstrapped sidePanels" layout="block" id="sidePanels">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">My Waiting List</div>
+                        <div class="panel-body listContainer">
+                            <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                                <apex:repeat value="{!MyWaitingList}" var="waiting">
+                                    <tr>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a> 
+                                        </td>
+                                        <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                            {!waiting.Volunteer_Job_Name__c}
+                                        </td>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="cancelHour('{!waiting.Id}');">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <apex:outputPanel rendered="{!IF(MyWaitingList.size > 0 , false , true )}">
+                                No records found.
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">My Confirmations</div>
+                        <div class="panel-body listContainer" >
+                            
+                            <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                                <apex:repeat value="{!MyConfirmList}" var="waiting">
+                                    <tr>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a> 
+                                        </td>
+                                        <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                            {!waiting.Volunteer_Job_Name__c}
+                                        </td>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="cancelHour('{!waiting.Id}');">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <apex:outputPanel rendered="{!IF(MyConfirmList.size > 0 , false , true )}">
+                                No records found.
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">My Cancellations</div>
+                        <div class="panel-body listContainer">
+                            <table border="0" cellpadding="5" cellspacing="5" style="width: 100%;">
+                                <apex:repeat value="{!MyCancelList}" var="waiting">
+                                    <tr>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <a href="/apex/JobView?id={!waiting.Volunteer_Job_ID__c}&conId={!selectedContact.Id}&shiftId={!waiting.GW_Volunteers__Volunteer_Shift__c}"><apex:outputfield value="{!waiting.GW_Volunteers__Planned_Start_Date_Time__c}" /> </a>
+                                        </td>
+                                        <td style="width:50%; vertical-align: top; padding-left: 5px;">
+                                            {!waiting.Volunteer_Job_Name__c}
+                                        </td>
+                                        <td style="width:25%; vertical-align: top;">
+                                            <button style="float: right;" class="btn" type="button" data-target="#myModal2" onclick="uncancelHour('{!waiting.Id}');">Uncancel</button>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <apex:outputPanel rendered="{!IF(MyCancelList.size > 0 , false , true )}">
+                                No records found.
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </apex:outputpanel-->
+            </div>
+        </div>
+        </div>
+        <apex:inputHidden id="selectedHourId" value="{!selectedHourId}"/>
+        <apex:actionfunction status="counterStatus" name="cancelHourAF" action="{!cancelHour}" rerender="sidePanels" oncomplete="$('#showCancelPopup').click();"/>
+        <apex:actionfunction status="counterStatus" name="uncancelHourAF" action="{!uncancelHour}" oncomplete="checkResult({!canceledByOrganization });" rerender="sidePanels"/>
+        
+        <button type="button" id="showCancelPopup" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myCancelModal"></button>
+        <button type="button" id="showUnCancelPopup" class="btn" style="display:none" data-dismiss="modal" data-toggle="modal" data-target="#myUnCancelModal"></button>
+        
+    </apex:form>   
+    <script src="/soap/ajax/29.0/connection.js" type="text/javascript" />
+    <script type="text/javascript">
+        
+        function openVolunteerApplicationVFpage3() {
+            window.open('/apex/VolunteerApplicationVFpage3?Id={!selectedContact.Id}&profile=true&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}','_self');
+        }
+        sforce.connection.sessionId = "{!$Api.Session_ID}";
+        
+        function checkResult(flag){
+            if(flag)
+                $('#showPopup').click();
+            else
+                $('#showUnCancelPopup').click();
+        }
+        function cancelHour(id) {
+            $('[id$="selectedHourId"]').val(id);
+            cancelHourAF();
+        }
+        
+        function uncancelHour(id) {
+            $('[id$="selectedHourId"]').val(id);
+            uncancelHourAF();
+        }
+        
+        function showDiv(event) {
+            $('.optionContainer').show();
+            event.stopPropagation();
+        }
+        function showOptions(val) {
+            if(val == '') {
+                $('.innerDiv').show();
+            }
+            $.each($('.metadataName'),function(index,div) {
+                if($(div).text().toLowerCase().indexOf(val.toLowerCase()) !=  -1) {
+                    $(div).parent().show();
+                }
+                else { 
+                    $(div).parent().hide();
+                }
+            });
+        }
+
+        $('[id$="inputText"]').on('click',function (evt) {
+            evt.stopPropagation();
+            $('.optionContainer').show();
+        });
+        $('.skillOptions').on('click',function (evt) {
+            evt.stopPropagation();
+            $('.optionContainer').show();
+        });
+        $('tbody').on('click',function() {
+            $('.optionContainer').hide();
+        });
+        $('#count').html($('input.skillOptions[type=checkbox]:checked').length);
+        $('.skillOptions').on('click',function(evt) {
+            $('#count').html($('input.skillOptions[type=checkbox]:checked').length);
+        });
+    
+        
+        function showModal(str) {
+            if(str == 'License') 
+                $('#modalTitle').html("Upload Driver's License");
+            else
+                $('#modalTitle').html('Upload Insurance Card');
+            $('#uploadButton').attr('onclick','insertAttachment("' + str + '");');
+            //$('#myModal').toggleClass('in');
+        }
+        
+        function insertAttachment(filename)
+        {
+            // Getting Session ID.
+            //console.log('----------'+);
+            if(document.getElementById("document").files.length > 0) {
+            
+                $('[id$="start"]').show();
+                var reader = new FileReader();
+    
+                // Keep a reference to the File in the FileReader so it can be accessed in callbacks
+                reader.file = document.getElementById("document").files[0];
+    
+                reader.onload = function(e)
+                {
+                    var att = new sforce.SObject("Attachment");
+                    var ext = $('#document').val().substring($('#document').val().lastIndexOf('.')+1);
+                    att.Name = filename + '.' + ext;
+                    att.ContentType = this.file.type;
+                    att.ParentId = '{!Contact.Id}';
+    
+                    var binary = "";
+                    var bytes = new Uint8Array(e.target.result);
+                    var length = bytes.byteLength;
+    
+                    for (var i = 0; i < length; i++)
+                    {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+    
+                    att.Body = (new sforce.Base64Binary(binary)).toString();
+                    var query1 = "SELECT Id,Name FROM Attachment WHERE ParentID = '{!Contact.Id}' AND Name Like '" + filename + "%' ";
+                    var records = sforce.connection.query(query1).getArray("records");
+                    if(records.length > 0 ) 
+                        att.Id = records[0].Id;
+                    sforce.connection.upsert("Id",[att],
+                    {
+                        onSuccess : function(result, source)
+                        {
+                            if (result[0].getBoolean("success"))
+                            {
+                                console.log("new attachment created with id " + result[0].id);
+                                window.location.reload()
+                                
+                            }
+                            else
+                            {
+                                console.log("failed to create attachment " + result[0]);
+                                $('[id$="start"]').hide();
+                            }
+                        },
+                        onFailure : function(error, source)
+                        {
+                            console.log("an error has occurred " + error);
+                            $('[id$="start"]').hide();
+                        }
+                    });
+                };
+                reader.onprogress = function(data) 
+                {
+                    if (data.lengthComputable) 
+                    {                                            
+                        var complete = parseInt( ((data.loaded / data.total) * 100), 10 );
+                        console.log('=================='+complete);
+                    }
+                }
+                reader.readAsArrayBuffer(document.getElementById("document").files[0]);
+            }
+            else {
+                alert('Please select a file first.');
+            }
+        }
+        
+        /*
+            jQuery document ready
+        */
+      
+        var currentMonth=(new Date()).getMonth()
+        var yyyy=(new Date()).getFullYear()
+        var start= (Math.floor(currentMonth/3)*3)+1,
+        end= start+3,
+        startDate=new Date(start+'-01-'+ yyyy),
+        endDate= end>12?new Date('01-01-'+ (yyyy+1)):new Date(end+'-01-'+ (yyyy));
+        endDate=new Date((endDate.getTime())-1);
+        var calendar;
+        var colors = new Array({!$Label.ShiftsColorValues});
+        
+        var isload = false;
+        
+        $(document).ready(function()
+        {
+            /*
+                date store today date.
+                d store today date.
+                m store current month.
+                y store current year.
+            */
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+            
+            
+            /*
+                Initialize fullCalendar and store into variable.
+                Why in variable?
+                Because doing so we can use it inside other function.
+                In order to modify its option later.
+            */
+            
+            
+            
+            calendar = $('#calendar').fullCalendar(
+            {
+                /*
+                    header option will define our calendar header.
+                    left define what will be at left position in calendar
+                    center define what will be at center position in calendar
+                    right define what will be at right position in calendar
+                */
+                header:
+                {
+                    left: 'prev',
+                    center: 'title',
+                    right: 'next '
+                },
+                
+                firstDay:1,
+                columnFormat:'dddd',
+                                
+                /*
+                    defaultView option used to define which view to show by default,
+                    for example we have used agendaWeek.
+                */
+                defaultView: 'month',
+                /*
+                    selectable:true will enable user to select datetime slot
+                    selectHelper will add helpers for selectable.
+                */
+                
+                selectable: false,
+                selectHelper: true,
+                /*
+                    when user select timeslot this option code will execute.
+                    It has three arguments. Start,end and allDay.
+                    Start means starting time of event.
+                    End means ending time of event.
+                    allDay means if events is for entire day or not.
+                */
+                select: function(start, end, allDay)
+                {
+                    /*
+                        after selection user will be promted for enter title for event.
+                    */
+                    var title = prompt('Event Title:');
+                    /*
+                        if title is enterd calendar will add title and event into fullCalendar.
+                    */
+                    if (title)
+                    {
+                        calendar.fullCalendar('renderEvent',
+                            {
+                                title: title,
+                                start: start,
+                                end: end,
+                                allDay: allDay
+                            },
+                            true // make the event "stick"
+                        );
+                    }
+                    //calendar.fullCalendar('unselect');
+                },
+                events: function(start, end, timezone, callback) { 
+                    var startDate = new Date(start._d);
+                    var endDate = new Date(end._d);                    
+                    var dateString = (startDate.getMonth()+ 1 )+'/'+startDate.getDate()+'/'+startDate.getFullYear() + '#' + (endDate.getMonth()+ 1 )+'/'+endDate.getDate()+'/'+endDate.getFullYear();
+                    console.log(dateString);
+                    var stage = '{!stageForEvents}';
+                    if(stage == '')
+                        stage = 0;
+                        
+                    var txtVal = $("[id$='filterList']").val();
+                    console.log(txtVal);
+                    
+                    if(txtVal == "Available Shifts"){
+                        console.log("1");
+                        console.log('{!$CurrentPage.parameters.DAIS_tag}');
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.CalendarDashboardControllerV2.retrieveShifts}','{!Contact.Id}',dateString,stage,'{!$CurrentPage.parameters.DAIS_tag}', function(result, event) {
+                            if (event.type == 'exception') {
+                               // alert(event.message);
+                            } else {
+                                if (result != null) {
+                                    var shifts = [];
+                                    $.each(JSON.parse(result),function(index,shift) {
+                                        var icolor = numFromId(shift.jobId); 
+                                        var colorShift = colors[icolor % colors.length];
+                                        shift.color = colorShift ;
+                                        shifts.push(shift);
+                                    });
+                                    console.log(shifts);
+                                    console.log("11");
+                                    callback(shifts);
+                                }
+                            }
+                        }, {escape:false});
+                        
+                    }else if(txtVal == "My Waiting List"){
+                        console.log("2");
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.CalendarDashboardControllerV2.retrieveWaitingShifts}','{!Contact.Id}',dateString,stage,'{!$CurrentPage.parameters.DAIS_tag}', function(result, event) {
+                            if (event.type == 'exception') {
+                               // alert(event.message);
+                            } else {
+                                if (result != null) {
+                                    var shifts = [];
+                                    $.each(JSON.parse(result),function(index,shift) {
+                                        var icolor = numFromId(shift.jobId); 
+                                        var colorShift = colors[icolor % colors.length];
+                                        shift.color = colorShift ;
+                                        shifts.push(shift);
+                                    });
+                                    console.log(shifts);
+                                    console.log("22");
+                                    callback(shifts);
+                                }
+                            }
+                        }, {escape:false});
+                        
+                    }else if(txtVal == "My Confirmations"){
+                        console.log("3");
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.CalendarDashboardControllerV2.retrieveConfirmationShifts}','{!Contact.Id}',dateString,stage,'{!$CurrentPage.parameters.DAIS_tag}', function(result, event) {
+                            if (event.type == 'exception') {
+                               // alert(event.message);
+                            } else {
+                                if (result != null) {
+                                    var shifts = [];
+                                    $.each(JSON.parse(result),function(index,shift) {
+                                        var icolor = numFromId(shift.jobId); 
+                                        var colorShift = colors[icolor % colors.length];
+                                        shift.color = colorShift ;
+                                        shifts.push(shift);
+                                    });
+                                    console.log(shifts);
+                                    console.log("33");
+                                    callback(shifts);
+                                }
+                            }
+                        }, {escape:false});
+                    }
+                }
+                ,  
+                /*
+                    editable: true allow user to edit events.
+                */
+                editable: false,
+                
+                
+                eventBackgroundColor: '#c87b54',
+                eventBorderColor: '#c87b54',
+                           
+                eventMouseover: function (data, event, view) {
+
+                    tooltip = '<div class="tooltiptopicevent">' + 'Confirmed Volunteers: ' + data.conf + '</br>' + 'Available Volunteers: ' +  data.avail + '</div>';
+    
+                        $("body").append(tooltip);
+                        $(this).mouseover(function (e) {
+                            $(this).css('z-index', 10000);
+                            $('.tooltiptopicevent').fadeIn('500');
+                            $('.tooltiptopicevent').fadeTo('10', 1.9);
+                        }).mousemove(function (e) {
+                        if(e.clientX + 215   <= window.innerWidth)
+                        {
+                            $('.tooltiptopicevent').css('left', parseInt(e.clientX + 15 ));
+                            $('.tooltiptopicevent').css('right', 'auto');
+                        }
+                        else
+                        {
+                            $('.tooltiptopicevent').css('left', 'auto' );
+                            $('.tooltiptopicevent').css('right', parseInt(window.innerWidth - e.clientX ));
+                        }
+                        if(e.clientY + 55 <= window.innerHeight)
+                        {
+                            $('.tooltiptopicevent').css('top', parseInt(e.clientY + 5 ));
+                            $('.tooltiptopicevent').css('bottom', 'auto');
+                        }
+                        else
+                        {
+                            $('.tooltiptopicevent').css('top', 'auto');
+                            $('.tooltiptopicevent').css('bottom', parseInt(window.innerHeight - e.clientY));
+                        }
+                    });
+                },
+                eventMouseout: function (data, event, view) {
+                    $(this).css('z-index', 8);
+
+                    $('.tooltiptopicevent').remove();
+                },
+
+                eventClick: function(event) {
+                    if (event.url) {
+                        // window.open(event.url);
+                        window.top.location.href = event.url;
+                        return false;
+                    }
+                }
+            });
+            
+            $('.fc-prev-button').click(function(){
+                console.log("previous");
+               calendar.fullCalendar( 'removeEvents');
+            });
+            
+            $('.fc-next-button').click(function(){
+                console.log("next");
+                calendar.fullCalendar( 'removeEvents');
+            });
+        });
+        
+        function changeFilter(){
+            
+            var txtVal = $("[id$='filterList']").val();
+            var shifts = [];
+            
+            calendar.fullCalendar( 'removeEvents');
+            console.log(txtVal);
+            
+            var startDate = new Date(calendar.fullCalendar('getView').start._d);
+            var endDate = new Date(calendar.fullCalendar('getView').end._d);                    
+            var dateString = (startDate.getMonth()+ 1 )+'/'+startDate.getDate()+'/'+startDate.getFullYear() + '#' + (endDate.getMonth()+ 1 )+'/'+endDate.getDate()+'/'+endDate.getFullYear();
+            console.log(dateString);
+            
+            
+            if(txtVal == "Available Shifts"){
+                
+                var stage = '{!stageForEvents}';
+                if(stage == '')
+                    stage = 0;
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.CalendarDashboardControllerV2.retrieveShifts}','{!Contact.Id}',dateString,stage, function(result, event) {
+                    if (event.type == 'exception') {
+                       // alert(event.message);
+                    } else {
+                        if (result != null) {
+                            $.each(JSON.parse(result),function(index,shift) {
+                                var icolor = numFromId(shift.jobId); 
+                                var colorShift = colors[icolor % colors.length];
+                                shift.color = colorShift ;
+                                shifts.push(shift);
+                            });
+                            console.log(shifts);
+                            calendar.fullCalendar('addEventSource', shifts);
+                        }
+                    }
+                }, {escape:false});
+                
+            }else if(txtVal == "My Waiting List"){
+                var stage = '{!stageForEvents}';
+                if(stage == '')
+                    stage = 0;
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.CalendarDashboardControllerV2.retrieveWaitingShifts}','{!Contact.Id}',dateString,stage, function(result, event) {
+                    if (event.type == 'exception') {
+                       // alert(event.message);
+                    } else {
+                        if (result != null) {
+                            $.each(JSON.parse(result),function(index,shift) {
+                                var icolor = numFromId(shift.jobId); 
+                                var colorShift = colors[icolor % colors.length];
+                                shift.color = colorShift ;
+                                shifts.push(shift);
+                            });
+                            console.log(shifts);
+                            calendar.fullCalendar('addEventSource', shifts);
+                        }
+                    }
+                }, {escape:false});
+                
+            }else if(txtVal == "My Confirmations"){
+                
+                var stage = '{!stageForEvents}';
+                if(stage == '')
+                    stage = 0;
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.CalendarDashboardControllerV2.retrieveConfirmationShifts}','{!Contact.Id}',dateString,stage, function(result, event) {
+                    if (event.type == 'exception') {
+                       // alert(event.message);
+                    } else {
+                        if (result != null) {
+                            $.each(JSON.parse(result),function(index,shift) {
+                                var icolor = numFromId(shift.jobId); 
+                                var colorShift = colors[icolor % colors.length];
+                                shift.color = colorShift ;
+                                shifts.push(shift);
+                            });
+                            console.log(shifts);
+                            calendar.fullCalendar('addEventSource', shifts);
+                        }
+                    }
+                }, {escape:false});
+                
+            }
+        }
+        
+        function numFromId(id) {
+            var len = id.length;
+            var num = 0;
+            var i = 0; 
+            while (i < len) {
+                num += id.charCodeAt(i);
+                i++;
+            }
+            return num;
+        }
+        
+        function clickcalendarButton(buttonClass) {
+            $(buttonClass).click();
+        }
+
+    </script>
+</apex:page>

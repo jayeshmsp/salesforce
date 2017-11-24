@@ -1,0 +1,592 @@
+<apex:page standardController="Contact" action="{!fncredirect}" extensions="VolunteerApplicationSave" docType="html-5.0" sidebar="false" showHeader="false" cache="false"  >
+
+   
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.1.62/jquery.inputmask.bundle.js"></script>
+       
+        <script type="text/JavaScript">             
+           function removeCookies()
+           {
+           eraseCookie("MySFCookie");
+           } 
+        </script>
+        <style>
+            .red{
+                color:red;
+            }
+        .form-area
+        {
+            background-color:#f9f9f9;
+            padding: 20px 40x 40px 100px;
+            margin:  10px 0px 80px;            
+        }
+        </style>
+            
+        <script type="text/javascript">
+         
+        
+        function formatPhone(obj) {
+            var numbers = obj.value.replace(/\D/g, ''),
+                char = {0:'(',3:') ',6:' - '};
+            obj.value = '';
+            for (var i = 0; i < numbers.length; i++) {
+                obj.value += (char[i]||'') + numbers[i];
+            }
+        }
+        function limit(phone)
+        {
+            var max_chars = 16;
+        
+            if(phone.value.length > max_chars) {
+                phone.value = phone.value.substr(0, max_chars);
+                
+            }
+        }
+        </script>
+        <script>
+        j$ = jQuery.noConflict();
+        
+        j$(document).ready(function(){ 
+            
+            j$('#characterLeft').text('140 characters left');
+            j$('#message').keydown(function () {
+                var max = 140;
+                var len =  j$(this).val().length;
+                if (len >= max) {
+                    j$('#characterLeft').text('You have reached the limit');
+                    j$('#characterLeft').addClass('red');
+                    j$('#btnSubmit').addClass('disabled');            
+                } 
+                else {
+                    var ch = max - len;
+                    j$('#characterLeft').text(ch + ' characters left');
+                    j$('#btnSubmit').removeClass('disabled');
+                    j$('#characterLeft').removeClass('red');            
+                }
+            });    
+        });
+        
+        </script>
+       
+        <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/fullcalendar.css')}" rel='stylesheet' />
+        <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/fullcalendar.print.css')}" rel='stylesheet' media='print' />
+        <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/moment.min.js')}"></script>
+        <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.js')}"></script>
+        <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/jquery.modal.js')}" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/jquery.modal.css')}" type="text/css" media="screen" />
+        <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/fullcalendar.js')}"></script>
+        <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/bootstrap.min.js')}"></script>
+        <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style.css')}" rel='stylesheet' />
+            <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/font-awesome.css')}" rel='stylesheet' />
+                <link href="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/css/style-breadcrumbs.css')}" rel='stylesheet' />
+                    <script src="{!URLFOR($Resource.WrappedBootstrap, 'WrapedBootstrap/js/breadcrumbs.js')}"></script>
+        <style>
+            .fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody, .fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-content, .fc-unthemed .fc-popover {
+            border-color: rgba(200, 123, 84, 1);
+            }
+            .fc th, .fc td {
+            border-width: 3px;
+            }
+            .fc-ltr .fc-basic-view .fc-day-number {
+            float: right;
+            }
+            .fc-day-header { 
+            background: rgba(232, 209, 205, 1) !important;
+            }
+            .fc-day-top { 
+            background: rgba(232, 209, 205, 1) !important;
+            border-bottom: 3px solid !important; 
+            border-color: rgba(200, 123, 84, 1) !important;
+            }
+            .fc-sun {     
+            background: rgba(232, 182, 160, 1); 
+            }
+            .fc-sat { 
+            background: rgba(232, 182, 160, 1);  
+            }
+            .fc td.fc-today {
+            border-style: solid;
+            }
+            .fc-other-month { 
+            background: rgba(237,237,237,1) 
+            }
+            .calendarHeader {
+            margin-bottom: -3px;
+            border: 2px solid rgba(200, 123, 84, 1);
+            border-width: 2px;
+            padding: 6px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            background: rgba(232, 209, 205, 1);
+            height: 60px;
+            }
+            .fc-toolbar {
+            margin-bottom: 0px; 
+            }
+            .fc-row .fc-content-skeleton tbody td, .fc-row .fc-helper-skeleton tbody td {
+            padding-top: 2px;
+            }
+            .bootstrapped .panel-default {
+            border-color: #c87b54;
+            border-width: 2px;
+            border-radius: 0px;
+            
+            }
+            .calendar-optionContainer {
+            display:flex;
+            margin-left: 1%;
+            }
+            .bootstrapped .panel-default > .panel-heading {
+            color: #333333;
+            background-color: #c87b54;
+            border-color: #c87b54;
+            border-radius: 0px;
+            }
+            .sidePanels {
+            width:19%;
+            margin-left: 1%;
+            text-align: left;
+            }
+            .innerLinks {
+            color:#c87b54;
+            padding: 10px;
+            border-bottom: 1px solid;
+            }
+            .bootstrapped .panel-body {
+            padding: 0px;
+            }
+            .fc-next-button, .fc-prev-button {
+            display: none;
+            }
+            #calendar {
+            margin-top: -69px;
+            }
+            .fc-event {
+            color: #fff !important;
+            text-decoration: none;
+            border:0px !important;
+            }
+            .fa-icon {
+            color: #c87b54;
+            font-size: 1.5em;
+            cursor:pointer;
+            }
+            *, *::after, *::before {
+            box-sizing: border-box;
+            }
+            .btn {
+            background: #efaca1 ;
+            border: 2px solid #c87b54 !important;
+            }
+            .btn:hover {
+            background: #c87b54 ;
+            color: white !important;
+            }
+            .triangle {
+            margin-top: 0;
+            }
+            .cd-breadcrumb li, .cd-breadcrumb  li a {
+            cursor : default;
+            }
+            .fc-widget-content {
+            max-height: 200px;
+            overflow: auto;
+            }
+            a {
+            color: rgb(200, 123, 84);
+            }
+            .tooltiptopicevent{
+            width: 200px;
+            height: 60px;
+            background: rgb(232, 209, 205);
+            position: fixed;
+            z-index: 10001;
+            padding: 10px;
+            left: 455px;
+            right: auto;
+            top: auto;
+            bottom: 58px;
+            color: #c87b54;
+            border-radius: 15px;
+            border: 2px solid #c87b54;
+            }       
+            .fc-day-grid-event .fc-content {
+            white-space: initial;
+            }
+            .btstrpmodal {
+            background-color: rgba(93, 83, 83, 0.5);
+            display:none;
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            z-index: 1050;
+            outline: 0px;
+            padding-right: 0px;
+            overflow: auto;
+            }
+            .optionContainer {
+            border: 1px solid darkgrey;
+            border-radius: 4px;
+            margin-top: 1px;
+            display: none;
+            max-height: 200px;
+            min-width: 150px;
+            overflow: auto;
+            position: absolute;
+            background: white;
+            }
+            .form-control {
+            width: 100%;
+            }
+            .profileTable td {
+            padding: 4px;
+            }
+        </style>
+      <script>
+        function Validate()
+        {
+         var p=document.getElementById("j_id0:frm:j_id40:POI1").value;
+        if(p==''){
+        alert('Please select Program of Interest');
+            }
+        };
+        function Validate1()
+        {
+        var m=document.getElementById("j_id0:frm:j_id76:mob").value;
+         var p=document.getElementById("j_id0:frm:j_id75:j_id95").value;
+        if(p==''||m==''){
+        alert('Phone Type and Program of Interest are Madatory ');
+        
+           } 
+        };
+       
+    </script>
+   
+    
+    <apex:form id="frm">
+    <apex:actionFunction name="rerenderform" reRender="POI1"/>
+    <apex:actionFunction name="rerenderform1" reRender="POI2;mob"/>
+     <apex:pageBlock rendered="{!if(id<>null,True,false)}"> 
+       
+             <div class="col-md-5 fc-sun">
+                <div class="form-area fc-sun">       
+                    <br style="clear:both"/>   
+                    <apex:outputtext > <h3 style="margin-bottom: 25px; text-align: center;"> Volunteer  Application  Form   </h3> </apex:outputtext>          
+                     <apex:outputPanel id="tstpopup" >
+                      <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                       <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}" >
+                        <p><B>Thank You for Registering to Volunteer at the Art of Elysium</B><br/></P><p><br/></P><P>Next, you will be taken to your Volunteer Dashboard. Here, you can sign up for volunteer activities, cancel your sign-ups, and edit your contact information and volunteer preferences. Please sign up to attend one of our Volunteer Artist Orientations in order to become a volunteer at the Art of Elysium.</P><br/>
+                         <apex:commandButton value="Ok" action="/apex/CalendarDashboardV2?id={!contact.id}&profile=false&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}" rerender="tstpopup"/> 
+                          </apex:outputPanel>
+                           </apex:outputPanel>
+                            <div/>        
+                             <div class="form-group" title="Required"><font color="red">*</font>
+                             <label for="FirstName">First Name</label> 
+                            <apex:input html-placeholder="Enter Your First Name"  id="FirstName"  value="{!contactFirstname}" styleclass="form-control" /> 
+                           </div>
+                          <div class="form-group" title="Required"><font color="red">*</font>
+                        <label for="LastName">Last Name</label> 
+                       <apex:input html-placeholder="Enter Your Last Name"  id="LastName"  value="{!ContactLastName}" styleclass="form-control" /> 
+                      </div>                           
+                    <div class="form-group" title="Required"><font color="red">*</font>
+                  <label for="pp">Email:</label><font size="2px">(Enter Your Valid Email)</font>
+                <apex:input value="{!contactEmail}" html-placeholder="Ex:-abc@domain.com" id="email"   styleclass="form-control"/> 
+               </div>
+                <div class="form-group"  title="Required"><font color="red">*</font>  
+                  <label for="pp" >Primary Phone:</label><font size="2px">(Enter your 10 digit Phone Number, Mobile preferred.)</font>
+                    <apex:inputtext maxlength="16" onmousemove="formatPhone(this);" html-placeholder="(123)456-7890"  id="pp" value="{!contactphone}"  styleclass="form-control" />
+                     </div>
+                       <div class="form-group"  title="Required"><font color="red">*</font>  
+                        <label for="pptype">Primary Phone Type:</label>
+                         <apex:selectlist value="{!contactphonetype}" size="1" styleclass="form-control" >
+                        <apex:selectOptions value="{!options}" />
+                       </apex:selectlist>
+                    </div>
+                   <div class="form-group" title="Required"><font color="red">*</font> 
+                 <label for="ms">Mailing Street:</label>
+                <apex:inputtext html-placeholder="Mailing Street" maxlength="255"  id="ms" value="{!contactMS}"  styleclass="form-control" />
+               </div>
+              <div class="form-group" title="Required"><font color="red">*</font>  
+                <label for="mc">Mailing City:</label>
+                  <apex:inputtext html-placeholder="Mailing City" maxlength="100"  id="mc"  value="{!contactMCT}"  styleclass="form-control" />
+                    </div>
+                     <div class="form-group" title="Required"><font color="red">*</font>  
+                       <label for="mst">Mailing State:</label>
+                        <apex:inputtext html-placeholder="Mailing State" maxlength="2" id="mst" value="{!contactMST}"  styleclass="form-control" />
+                         </div>
+                          <div class="form-group" title="Required"><font color="red">*</font> 
+                         <label for="mpc">Mailing Zip/Postal Code:</label>
+                        <apex:inputtext html-placeholder="Mailing Zip/Postal Code" maxlength="10"  id="mpc"  value="{!contactMPC}"  styleclass="form-control" />
+                       </div>  
+                      <apex:outputPanel styleClass="fc-sun"  rendered="{!IF($CurrentPage.parameters.profile = 'true',false,true)}" >      
+                    <div class="form-group" title="Required"><font color="red">*</font>  
+                  <label for="pi">Program of Interest:</label> 
+                <apex:selectlist value="{!ContactProgramofInterest}" size="1" styleclass="form-control"   >
+              <apex:selectOptions value="{!options1}"  />
+                </apex:selectlist>
+                   </div>
+                     </apex:outputPanel>
+                      <div class="form-group"> 
+                       <label for="skills">Volunteer Skills:</label>
+                        <apex:selectCheckboxes id="skills" value="{!skillsets}"  layout="pageDirection" styleclass="form-control checkboxstyle notbold">
+                          <apex:selectOptions value="{!skillOptions2}" />
+                           </apex:selectCheckboxes>
+                            </div>
+                             <!-- Code added by Appsinvent-->
+                           <div class="form-group" > 
+                         <label for="skillsvol">Volunteer Availability:</label>
+                        <apex:selectCheckboxes id="skillsvol" value="{!skillsets_vol}"  layout="pageDirection" styleclass="form-control checkboxstyle notbold">
+                      <apex:selectOptions value="{!Volunteer_Availability}" />
+                     </apex:selectCheckboxes>
+                    </div>
+                   <!-- Code added by Appsinvent-->        
+               
+                      <c:Volunteertermsandconditionscomponent1 />    
+                    
+                  <p id="demo"></p>
+                <div class="bootstrapped " style="max-width: 900px;margin-bottom:2%;text-align: left; ">
+              <center>   <apex:commandButton action="{!saveRecord1}" value="Save" onclick="alertBox();"/>
+              <button class="btn "  type="button"  onclick="cancel();"  >Cancel</button>
+              </center>  
+             </div>
+            </div>           
+           </div>
+         </apex:pageBlock> 
+        <apex:pageBlock rendered="{!if(id==null&&recordid==null,true,false)}" >   
+          <apex:param name="myParam" value="{!skillsets}"/>
+            <apex:actionFunction name="cancel" action="{!redirectpage}"/>
+              <div class="col-md-5 fc-sun">
+                <div class="form-area fc-sun">       
+                  <br style="clear:both"/>            
+                    <apex:outputtext rendered="{!IF($CurrentPage.parameters.profile = 'true',true,false)}" > <h3 style="margin-bottom: 25px; text-align: center;"> Edit Profile   </h3> </apex:outputtext>                        
+                   <apex:outputtext rendered="{!IF($CurrentPage.parameters.profile = 'true',false,true)}" > <h3 style="margin-bottom: 25px; text-align: center;"> Volunteer  Application  Form   </h3> </apex:outputtext>                         
+                             <apex:outputPanel id="tstpopup" >
+                      <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                       <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}" >
+                        <p><B>Thank You for Registering to Volunteer at the Art of Elysium</B><br/></P><p><br/></P><P>Next, you will be taken to your Volunteer Dashboard. Here, you can sign up for volunteer activities, cancel your sign-ups, and edit your contact information and volunteer preferences. Please sign up to attend one of our Volunteer Artist Orientations in order to become a volunteer at the Art of Elysium.</P><br/>
+                         <apex:commandButton value="Ok" action="/apex/CalendarDashboardV2?id={!contact.id}&profile=false&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}" rerender="tstpopup"/> 
+                          </apex:outputPanel>
+                           </apex:outputPanel>       
+         <div class="form-group" title="Required"><font color="red">*</font>
+           <label for="FirstName">First Name</label> 
+             <div style="background-color:red;"></div><apex:inputfield required="true" html-placeholder="Enter Your First Name"  id="FirstName" value="{!Contact.FirstName}" styleclass="form-control requiredInput" /> 
+               <!--<script> var FirstName= "{!$Component.FirstName}";</script>-->
+                 </div>
+                   <div class="form-group" title="Required"><font color="red">*</font>
+                     <label for="LastName">Last Name</label> 
+                      <apex:inputfield required="true" html-placeholder="Enter Your Last Name"  id="LastName"  value="{!Contact.LastName}" styleclass="form-control" /> 
+                     <!-- <script> var LastName= "{!$Component.LastName}";</script>-->
+                    </div>
+                   <div class="form-group" >
+                  <apex:inputHidden id="Toae"  value="{!Contact.Taoe_User_ID__c}"   /> 
+                 <!-- <script> var Toae= "{!$Component.Toae}"; </script>-->
+                </div>
+               <div class="form-group" title="Required"><font color="red">*</font>
+              <label for="email">Email:</label><font size="2px">(Enter Your Valid Email)</font>
+             <apex:inputfield required="true" value="{!Contact.npe01__HomeEmail__c}" html-placeholder="Ex:-abc@domain.com" id="email"   styleclass="form-control"/> 
+            <!-- <script>var email= "{!$Component.email}";</script>-->
+             </div>
+              <div  class="form-group" title="Required"><font color="red">*</font> 
+                <label for="pp" >Primary Phone:</label><font size="2px">(Enter your 10 digit Phone Number, Mobile preferred.)</font>
+                  <apex:inputField required="true" onkeyup="limit(this);formatPhone(this);" onmousemove="formatPhone(this);limit(this);"  html-placeholder="(123)456-7890"  id="pp" value="{!Con.Primary_Phone__c}"  styleclass="form-control" />
+                    
+                   <!--<script> var phone= "{!$Component.phone}";</script>-->
+                      </div>
+                       <div class="form-group" title="Required"><font color="red">*</font> 
+                        <label for="pptype">Primary Phone Type:</label>
+                       <apex:inputfield required="true" id="pptype" value="{!Contact.Primary_Phone_Type__c}"  styleclass="form-control" />
+                      </div>
+                    <div class="form-group" title="Required"><font color="red">*</font>  
+                   <label for="ms">Mailing Street:</label>
+                  <apex:inputfield html-placeholder="Mailing Street" required="true" id="ms" value="{!Contact.Mailing_Street__c}"  styleclass="form-control" />
+                 </div>
+                <div class="form-group" title="Required"><font color="red">*</font>  
+               <label for="mc">Mailing City:</label>
+              <apex:inputfield html-placeholder="Mailing City" required="true" id="mc"  value="{!Contact.Mailing_City__c}"  styleclass="form-control" />
+               </div>
+                 <div class="form-group" title="Required"><font color="red">*</font>  
+                   <label for="mst">Mailing State:</label>
+                     <apex:inputfield html-placeholder="Mailing State" required="true" id="mst" value="{!Contact.Mailing_State__c}"  styleclass="form-control" />
+                      </div>
+                       <div class="form-group"  title="Required"><font color="red">*</font>   
+                         <label for="mpc">Mailing Zip/Postal Code:</label>
+                        <apex:inputfield html-placeholder="Mailing Zip/Postal Code" required="true" id="mpc"  value="{!Contact.Mailing_Postal_Code__c}"  styleclass="form-control" />
+                      </div> 
+                    <apex:outputPanel styleClass="fc-sun"  rendered="{!IF($CurrentPage.parameters.profile = 'true',false,true)}" > 
+                   <div class="form-group" title="Required"><font color="red">*</font>  
+                   <label for="pi">Program of Interest:</label>
+                     <div class="requiredInput">
+                      <div class="requiredBlock"></div>
+                        <apex:inputhidden id="pi"  value="{!Contact.Program_of_Interest__c}"  />
+                      <apex:selectlist value="{!ContactProgramofInterest}" size="1" styleclass="form-control" required="true" id="POI1" onChange="rerenderform();"  >
+                    <apex:selectOptions value="{!options1}" />
+                  </apex:selectlist>
+                  <script> var POI1= "{!$Component.POI1}";</script>
+                </div> </div> 
+               </apex:outputPanel>
+               <div class="form-group"  > 
+                 <label for="skills">Volunteer Skills:</label>
+                   <apex:selectCheckboxes id="skills" value="{!skillsets}"   layout="pageDirection" styleclass="form-control checkboxstyle notbold">
+                     <apex:selectOptions value="{!skillOptions2}" id="sk"  />
+                        </apex:selectCheckboxes>
+                         </div>
+                    <!-- Code added by Appsinvent-->
+                      <div class="form-group" > 
+                     <label for="skillsvol">Volunteer Availability:</label>
+                    <apex:selectCheckboxes id="skillsvol"  value="{!skillsets_vol}"  layout="pageDirection" styleclass="form-control checkboxstyle notbold">
+                   <apex:selectOptions value="{!Volunteer_Availability}" id="av"  />
+                  </apex:selectCheckboxes>
+                 </div>
+                <!-- Code added by Appsinvent-->        
+                <apex:inputtext rendered="false"    id="vs"  value="{!skillsets}"  />
+                
+                      <c:Volunteertermsandconditionscomponent1 />  
+                       
+                  <p id="demo"></p>
+                <div class="bootstrapped " style="max-width: 900px;margin-bottom:2%;text-align: left; ">
+              <center>   <apex:commandButton action="{!saveRecord1}"  value="Save" onmouseover="Validate();" onkeypress="Validate();" />
+              
+            <button class="btn "  type="button"  onclick="cancel();"  >Cancel</button>
+            </center>   </div>
+            </div>
+            </div>
+            </apex:pageBlock>
+            <apex:pageBlock rendered="{!if(recordid<>null&&id==null,true,false)}">     
+             <div class="col-md-5 fc-sun">
+                <div class="form-area fc-sun">       
+                    <br style="clear:both"/>            
+                      <apex:outputtext rendered="{!IF($CurrentPage.parameters.profile = 'true',false,true)}" > <h3 style="margin-bottom: 25px; text-align: center;">Volunteer  Application  Form  </h3> </apex:outputtext>                        
+                       <apex:outputtext rendered="{!IF($CurrentPage.parameters.profile = 'true',true,false)}" > <h3 style="margin-bottom: 25px; text-align: center;">Edit Profile   </h3> </apex:outputtext>                        
+                        <div/>        
+                         <div class="form-group" title="Required"><font color="red">*</font>
+                          <label for="FirstName">First Name</label> 
+                           <apex:input required="true" html-placeholder="Enter Your First Name"  id="FirstName"  value="{!contactFirstname}" styleclass="form-control" /> 
+                           </div>
+                          <div class="form-group" title="Required"><font color="red">*</font>
+                        <label for="LastName">Last Name</label> 
+                       <apex:input required="true" html-placeholder="Enter Your Last Name"  id="LastName"  value="{!ContactLastName}" styleclass="form-control" /> 
+                      </div>                           
+                    <div class="form-group" title="Required"><font color="red">*</font>
+                  <label for="pp">Email:</label><font size="2px">(Enter Your Valid Email)</font>
+                <apex:input required="true" value="{!contactEmail}" html-placeholder="Ex:-abc@domain.com" id="email"   styleclass="form-control"/> 
+               </div>
+                <div class="form-group"  title="Required"><font color="red">*</font>  
+                  <label for="pp" >Primary Phone:</label><font size="2px">(Enter your 10 digit Phone Number, Mobile preferred.)</font>
+                    <apex:inputtext required="true" maxlength="16" onkeyup="limit(this);formatPhone(this);" html-placeholder="(123)456-7890"  id="pp" value="{!contactphone}"  styleclass="form-control" />
+                     </div>
+                       <div class="form-group"  title="Required"><font color="red">*</font>  
+                        <label for="pptype">Primary Phone Type:</label>
+                         <apex:selectlist value="{!contactphonetype}" size="1" styleclass="form-control" id="mob" onChange="rerenderform1();" >
+                        <apex:selectOptions value="{!options}" />
+                       </apex:selectlist>
+                    </div>
+                   <div class="form-group" title="Required"><font color="red">*</font> 
+                 <label for="ms">Mailing Street:</label>
+                <apex:inputtext required="true" html-placeholder="Mailing Street" maxlength="255"  id="ms" value="{!contactMS}"  styleclass="form-control" />
+               </div>
+              <div class="form-group" title="Required"><font color="red">*</font>  
+                <label for="mc">Mailing City:</label>
+                  <apex:inputtext required="true" html-placeholder="Mailing City" maxlength="100"  id="mc"  value="{!contactMCT}"  styleclass="form-control" />
+                    </div>
+                     <div class="form-group" title="Required"><font color="red">*</font>  
+                       <label for="mst">Mailing State:</label>
+                        <apex:inputtext required="true" html-placeholder="Mailing State" maxlength="2" id="mst" value="{!contactMST}"  styleclass="form-control" />
+                         </div>
+                          <div class="form-group" title="Required"><font color="red">*</font> 
+                         <label for="mpc">Mailing Zip/Postal Code:</label>
+                        <apex:inputtext required="true" html-placeholder="Mailing Zip/Postal Code" maxlength="10"  id="mpc"  value="{!contactMPC}"  styleclass="form-control" />
+                       </div>  
+                     <apex:outputPanel styleClass="fc-sun"  rendered="{!IF($CurrentPage.parameters.profile = 'true',false,true)}" >      
+                    <div class="form-group" title="Required"><font color="red">*</font>  
+                  <label for="pi">Program of Interest:</label> 
+                <apex:selectlist value="{!ContactProgramofInterest}" size="1" styleclass="form-control" required="true" onChange="rerenderform1();" id="POI2" >
+              <apex:selectOptions value="{!options1}" />
+                </apex:selectlist>
+                   </div>
+                     </apex:outputPanel>
+                      <div class="form-group"> 
+                       <label for="skills">Volunteer Skills:</label>
+                        <apex:selectCheckboxes id="skills" value="{!skillsets}"  layout="pageDirection" styleclass="form-control checkboxstyle notbold">
+                          <apex:selectOptions value="{!skillOptions2}" />
+                           </apex:selectCheckboxes>
+                            </div>
+                             <!-- Code added by Appsinvent-->
+                           <div class="form-group" > 
+                         <label for="skillsvol">Volunteer Availability:</label>
+                        <apex:selectCheckboxes id="skillsvol" value="{!skillsets_vol}"  layout="pageDirection" styleclass="form-control checkboxstyle notbold">
+                      <apex:selectOptions value="{!Volunteer_Availability}" />
+                     </apex:selectCheckboxes>
+                    </div>
+                   <!-- Code added by Appsinvent-->        
+                 <apex:inputtext rendered="false"    id="vs"  value="{!skillsets}"  />                   
+               
+             <c:Volunteertermsandconditionscomponent1 /> 
+             <apex:outputPanel id="tstpopup1" >
+               <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp1}"/>
+                <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp1}" >
+                 <p><B>Your Profile for  Volunteer at the Art of Elysium Updated sucessfully</B><br/></P><p><br/></P><P>Next, you will be taken to your Volunteer Dashboard. Here, you can sign up for volunteer activities, cancel your sign-ups, and edit your contact information and volunteer preferences.Please sign up to attend one of our Volunteer Artist Orientations in order to become a volunteer at the Art of Elysium.</P><br/>
+               <apex:commandButton value="Ok" action="/apex/CalendarDashboardV2?id={!contact.id}&profile=false&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}" rerender="tstpopup1"/> 
+              </apex:outputPanel>
+             </apex:outputPanel>
+             <apex:outputPanel id="tstpopup" >
+               <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}" >
+                 <p><B>Your Profile for  Volunteer at the Art of Elysium Updated sucessfully</B><br/></P><p><br/></P><P>Next, you will be taken to your Volunteer Dashboard. Here, you can sign up for volunteer activities, cancel your sign-ups, and edit your contact information and volunteer preferences. </P><br/>
+               <apex:commandButton value="Ok" action="/apex/CalendarDashboardV2?id={!contact.id}&profile=false&DAIS_tag={!$CurrentPage.parameters.DAIS_tag}" rerender="tstpopup"/> 
+              </apex:outputPanel>
+             </apex:outputPanel>
+            
+               <div class="bootstrapped " style="max-width: 900px;margin-top:2%;text-align: left; ">
+                  <center>
+                    <apex:commandButton action="{!updatedata}" value="Update" onmouseover="Validate1();" onkeypress="Validate1();"/>
+                      <button class="btn "  type="button"  onclick="cancel();" >Cancel</button>
+                        </center>
+                    </div>           
+                  </div>
+               </div>   
+            </apex:pageBlock>
+          </apex:form>
+         
+        <style type="text/css">
+        .notbold{
+        font-weight: normal;
+        }
+        .checkboxstyle{
+        height: 100px;
+        width: auto;
+        overflow: auto;
+        }
+        .custPopup{
+        background-color: white;
+        border-width: 2px;
+        border-style: solid;
+        z-index: 9999;
+        left: 50%;
+        padding:10px;
+        position: absolute;
+        
+        width: 500px;
+        margin-left: 170px;
+        top:100px;
+        }
+        .popupBackground{
+        background-color:black;
+        opacity: 0.20;
+        filter: alpha(opacity = 20);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .astrix{
+        color: red;  
+        }
+    </style>
+      
+</apex:page>
